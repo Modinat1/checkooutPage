@@ -22,7 +22,7 @@ const CartDetails = ({ cart, setCart }) => {
     <div className="cart-details">
       <table className="bg-white rounded-lg table-auto w-full border-collapse">
         <thead>
-          <tr className="border-b-2 border-gray-300">
+          <tr className="border-b border-gray-300">
             <th className="p-2">Product Image</th>
             <th className="p-2">Product Description</th>
             <th className="p-2">Product Actions</th>
@@ -30,27 +30,31 @@ const CartDetails = ({ cart, setCart }) => {
         </thead>
         <tbody>
           {cart.map((item) => (
-            <tr key={item.id} className="hover:bg-gray-100 border-b border-gray-200">
+            <tr key={item.id} className="hover:bg-[whitesmoke] border-b border-gray-200">
               {/* Product Image */}
               <td className="p-2 text-center">
+                <div className='md:ml-5'>
                 <img
                   className="w-20 h-20 object-cover"
                   src={item.img}
                   alt="product"
                 />
+                </div>
               </td>
 
               {/* Product Description */}
-              <td className="p-2 text-center">
+              <td className="p-2">
+                <div className='ml-3 md:ml-36'>
                 <h3 className="font-bold">{item.name}</h3>
                 <p className="text-sm text-gray-600">Price: ${item.price}</p>
 
-                <div className='flex items-center gap-2'>
+                <div className='md:flex items-center gap-2'>
                 <small className='text-[#969696] text-[14px]'>Sold by <span className='underline capitalize'>{item.vendor}</span></small>
                 <span>|</span>
                 <div onClick={() => handleRemove(item.id)} className='relative flex items-center text-[#969696] gap-x-1'>
                     <GoTrash className='cursor-pointer'/>
                     <small className='text-xs font-medium underline cursor-pointer'>Remove</small>
+                </div>
                 </div>
                 </div>
               </td>

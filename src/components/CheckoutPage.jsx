@@ -7,14 +7,14 @@ import OrderSummary from './OrderSummary';
 import axios from "axios";
 import DefaultModal from './Modal';
 import { Link } from 'react-router-dom';
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [openModal, setOpenModal] = useState(false)
-  // const [verificationData, setVerificationData] = useState({});
+  const [verificationData, setVerificationData] = useState({});
   const [paymentResponse, setPaymentResponse] = useState({});
   const [cart, setCart] = useState([
     {
@@ -69,6 +69,7 @@ const handlePayment = () => {
         if(response.status === "success"){
           setPaymentResponse(response)
           setOpenModal(true)
+          navigate("/verify", { state: { verificationData } });
         }
         verifyTransaction(response.reference); 
       },
@@ -79,29 +80,6 @@ const handlePayment = () => {
   
     handler.openIframe();
   };
-
-  
-  // Function to verify transaction
-  // const verifyTransaction = async (reference) => {
-  //   try {
-  //     const response = await axios.post(
-  //       "https://pal-backend.onrender.com/api/verify-payment",
-  //       { reference },
-  //       { headers: { "Content-Type": "application/json" } }
-  //     );
-  
-  //     const data = response.data;
-  //     if (response.status === 200 && data.status === "success") {
-  //       console.log("Verified Payment Details:", data.data);
-  //       return data.data; // Return verification data
-  //     } else {
-  //       throw new Error(data.message || "Payment verification failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Verification Error:", error.message);
-  //     throw error;
-  //   }
-  // };
   
   const verifyTransaction = async (reference) => {
     try {
@@ -117,13 +95,12 @@ const handlePayment = () => {
       console.log("Verification Response:", data);
   
       if (response.status === 200 && data.status === "success") {
-        // alert("Payment verified successfully!");
-        return("Verified Payment Details:", data.data);
-        // setVerificationData(data.data);
-        // console.log(data.data.customer);
+        setVerificationData(data);
+        console.log(data)
+        return("Verified Payment Details:", data);
       } else {
-        throw new Error(data.message || "Payment verification failed");
-        // console.error("Verification Error:", data.message);
+        console.error("Verification Error:", data.status);
+        throw new Error(data.status || "Payment verification failed");
       }
     } catch (error) {
       console.error("Verification Error:", error.message);
@@ -140,7 +117,7 @@ const handlePayment = () => {
     <div>
     <h1 className="text-center my-5 text-lg font-bold">Checkout Page</h1>
     
-    <div className="w-full px-10 md:grid grid-cols-3 gap-5">
+    <div className="w-full px-5 md:px-10 md:grid grid-cols-3 gap-5">
       <div className="col-span-2">
       <CartDetails cart={cart} setCart={setCart}/>
       </div>

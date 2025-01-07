@@ -7,6 +7,7 @@ const VerificationPage = () => {
   if (!verificationData) {
     return <p>No transaction details available.</p>;
   }
+console.log(verificationData);
 
   return (
     <div className="verification-page">
@@ -14,8 +15,6 @@ const VerificationPage = () => {
       <p>Reference: {verificationData.reference}</p>
       <p>Amount: {verificationData.amount / 100} NGN</p>
       <p>Status: {verificationData.status}</p>
-      <p>Customer: {verificationData.customer.email}</p>
-      {/* Add more details as needed */}
     </div>
   );
 };
