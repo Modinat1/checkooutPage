@@ -63,13 +63,14 @@ const CartDetails = ({ cart, setCart }) => {
               <td className="flex justify-center items-start p-2">
            
                  <div className='inline-flex items-center rounded-xl border border-[#DEDEDE] gap-x-2 mt-5'>
+                                <div className='px-2' style={{ borderLeft: "1px solid #DEDEDE" }}>
+                                        <FiMinus className='cursor-pointer' onClick={() => handleQuantityChange(item.id, -1)} />
+                                    </div>
+                                    <span className="font-medium">{item.quantity}</span>
                                     <div className='text-center px-2' style={{ borderRight: "1px solid #DEDEDE" }}>
                                         <GoPlus className='cursor-pointer' onClick={() => handleQuantityChange(item.id, 1)} />
                                     </div>
-                                    <span className="font-medium">{item.quantity}</span>
-                                    <div className='px-2' style={{ borderLeft: "1px solid #DEDEDE" }}>
-                                        <FiMinus className='cursor-pointer' onClick={() => handleQuantityChange(item.id, -1)} />
-                                    </div>
+                                  
                                 </div>
               </td>
             </tr>
