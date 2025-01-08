@@ -4,7 +4,6 @@ import product_1 from "../assets/p-1.png"
 import product_2 from "../assets/p-2.jpg"
 import product_3 from "../assets/p-3.png"
 import OrderSummary from './OrderSummary';
-import axios from "axios";
 import DefaultModal from './Modal';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +11,7 @@ const CheckoutPage = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [openModal, setOpenModal] = useState(false)
-  const [verificationData, setVerificationData] = useState({});
+  const [reference, setReference] = useState({});
   const [paymentResponse, setPaymentResponse] = useState({});
   const [cart, setCart] = useState([
     {
@@ -68,7 +67,8 @@ const handlePayment = () => {
           setPaymentResponse(response)
           setOpenModal(true)
         }
-        verifyTransaction(response.reference); 
+        setReference(response.reference) 
+        // verifyTransaction(response.reference);
       },
       onClose: () => {
         alert("Transaction was not completed, window closed.");
@@ -79,31 +79,31 @@ const handlePayment = () => {
   };
 
   
-  const verifyTransaction = async (reference) => {
-    try {
-      console.log("Verifying transaction...");
+  // const verifyTransaction = async (reference) => {
+  //   try {
+  //     console.log("Verifying transaction...");
       
-      const response = await axios.post("https://pal-backend.onrender.com/api/verify-payment",{ reference },
-        {
-          headers: { "Content-Type": "application/json" }, 
-        }
-      );
+  //     const response = await axios.post("https://pal-backend.onrender.com/api/verify-payment",{ reference },
+  //       {
+  //         headers: { "Content-Type": "application/json" }, 
+  //       }
+  //     );
   
-      const data = response.data.data; 
-      console.log("Verification Response:", data);
+  //     const data = response.data.data; 
+  //     console.log("Verification Response:", data);
   
-      if (data.status === "success") {
-        setVerificationData(data);
-        return(data);
-      } else {
-        console.error("Verification Error:", data.status);
-        throw new Error(data.status || "Payment verification failed");
-      }
-    } catch (error) {
-      console.error("Verification Error:", error.message);
-       throw error;
-    }
-  };
+  //     if (data.status === "success") {
+  //       setVerificationData(data);
+  //       return(data);
+  //     } else {
+  //       console.error("Verification Error:", data.status);
+  //       throw new Error(data.status || "Payment verification failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Verification Error:", error.message);
+  //      throw error;
+  //   }
+  // };
   
 
   const toggleModal = () => {
@@ -133,7 +133,7 @@ const handlePayment = () => {
           Your transaction has been {paymentResponse.message} with {paymentResponse.reference}
         </h3>
 
-        <Link to='/verify' state={{ verificationData }}>
+        <Link to='/verify' state={{ reference }}>
         <button className='block capitalize mx-auto text-[#ffffff] bg-[#5a87a7] px-3 py-1 my-3 hover:scale-75'>
           Verify Payment
         </button>
