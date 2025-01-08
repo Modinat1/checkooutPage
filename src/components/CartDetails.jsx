@@ -50,7 +50,7 @@ const CartDetails = ({ cart, setCart }) => {
 
                 <div className='md:flex items-center gap-2'>
                 <small className='text-[#969696] text-[14px]'>Sold by <span className='underline capitalize'>{item.vendor}</span></small>
-                <span>|</span>
+                <span className='hidden md:block'>|</span>
                 <div onClick={() => handleRemove(item.id)} className='relative flex items-center text-[#969696] gap-x-1'>
                     <GoTrash className='cursor-pointer'/>
                     <small className='text-xs font-medium underline cursor-pointer'>Remove</small>

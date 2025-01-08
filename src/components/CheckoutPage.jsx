@@ -7,10 +7,8 @@ import OrderSummary from './OrderSummary';
 import axios from "axios";
 import DefaultModal from './Modal';
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [openModal, setOpenModal] = useState(false)
@@ -62,14 +60,13 @@ const handlePayment = () => {
     const handler = window.PaystackPop.setup({
       key: "pk_test_b298d476e79aa55787cdc691ef704bac014c6524", 
       email: email,
-      amount: calculateTotal() * 100, // Amount in kobo
+      amount: calculateTotal() * 100, 
       currency: "NGN",
       ref: `ref-${Math.ceil(Math.random() * 1000000000)}`, 
       callback: (response) => {
         if(response.status === "success"){
           setPaymentResponse(response)
           setOpenModal(true)
-          navigate("/verify", { state: { verificationData } });
         }
         verifyTransaction(response.reference); 
       },
@@ -80,6 +77,7 @@ const handlePayment = () => {
   
     handler.openIframe();
   };
+
   
   const verifyTransaction = async (reference) => {
     try {
@@ -94,10 +92,9 @@ const handlePayment = () => {
       const data = response.data.data; 
       console.log("Verification Response:", data);
   
-      if (response.status === 200 && data.status === "success") {
+      if (data.status === "success") {
         setVerificationData(data);
-        console.log(data)
-        return("Verified Payment Details:", data);
+        return(data);
       } else {
         console.error("Verification Error:", data.status);
         throw new Error(data.status || "Payment verification failed");
@@ -131,11 +128,17 @@ const handlePayment = () => {
       </div>
     </div>
 
-    <DefaultModal subheading subtitle="Payment Status" closeModal={toggleModal} visibilityState={openModal}>
-        <h1 className='text-center'>Transaction {paymentResponse.message}</h1>
-        <h3>{paymentResponse.reference}</h3>
-        <h3>{paymentResponse.status}</h3>
-        <Link to='/verify'><button>Verify Payment</button></Link>
+    <DefaultModal subheading closeModal={toggleModal} visibilityState={openModal}>
+        <h3 className='text-center text-lg font-medium'>
+          Your transaction has been {paymentResponse.message} with {paymentResponse.reference}
+        </h3>
+
+        <Link to='/verify' state={{ verificationData }}>
+        <button className='block capitalize mx-auto text-[#ffffff] bg-[#5a87a7] px-3 py-1 my-3 hover:scale-75'>
+          Verify Payment
+        </button>
+        </Link>
+
     </DefaultModal>
   
     </div>
